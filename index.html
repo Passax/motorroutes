@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Motorroutes vanuit Maassluis</title>
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #0f0f0f;
+            color: #e0e0e0;
+            line-height: 1.6;
+        }
+
+        /* Header / Hero */
+        .hero {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 40%, #0f3460 70%, #e94560 100%);
+            padding: 4rem 2rem 3rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                90deg,
+                transparent,
+                transparent 50px,
+                rgba(255,255,255,0.015) 50px,
+                rgba(255,255,255,0.015) 51px
+            );
+        }
+
+        .hero h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: -0.5px;
+            position: relative;
+        }
+
+        .hero h1 span {
+            color: #e94560;
+        }
+
+        .hero p {
+            font-size: clamp(1rem, 2.5vw, 1.25rem);
+            color: rgba(255,255,255,0.7);
+            margin-top: 0.75rem;
+            position: relative;
+        }
+
+        .hero .badge {
+            display: inline-block;
+            margin-top: 1.5rem;
+            padding: 0.5rem 1.25rem;
+            background: rgba(233, 69, 96, 0.15);
+            border: 1px solid rgba(233, 69, 96, 0.4);
+            border-radius: 50px;
+            color: #e94560;
+            font-size: 0.85rem;
+            font-weight: 600;
+            position: relative;
+        }
+
+        /* Main */
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2.5rem 1.5rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid #e94560;
+            display: inline-block;
+        }
+
+        /* Route Grid */
+        .routes {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .route-card {
+            background: #1a1a2e;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.06);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .route-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(0,0,0,0.4);
+        }
+
+        .route-header {
+            padding: 1.25rem 1.5rem 0.75rem;
+        }
+
+        .route-header h2 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .route-meta {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            padding: 0 1.5rem;
+        }
+
+        .meta-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.6);
+            background: rgba(255,255,255,0.05);
+            padding: 0.3rem 0.65rem;
+            border-radius: 6px;
+        }
+
+        .meta-tag .icon {
+            font-size: 0.9rem;
+        }
+
+        .route-body {
+            padding: 1rem 1.5rem;
+        }
+
+        .route-body p {
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.55);
+        }
+
+        .route-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 1.5rem 1.25rem;
+        }
+
+        .difficulty {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 0.3rem 0.75rem;
+            border-radius: 50px;
+        }
+
+        .difficulty.easy {
+            background: rgba(46, 213, 115, 0.12);
+            color: #2ed573;
+            border: 1px solid rgba(46, 213, 115, 0.25);
+        }
+
+        .difficulty.medium {
+            background: rgba(255, 165, 2, 0.12);
+            color: #ffa502;
+            border: 1px solid rgba(255, 165, 2, 0.25);
+        }
+
+        .start-point {
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.4);
+        }
+
+        .start-point strong {
+            color: rgba(255,255,255,0.6);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem 1.5rem;
+            margin-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.06);
+            color: rgba(255,255,255,0.3);
+            font-size: 0.85rem;
+        }
+
+        footer span {
+            color: #e94560;
+        }
+
+        /* Responsive */
+        @media (max-width: 400px) {
+            .routes {
+                grid-template-columns: 1fr;
+            }
+
+            .hero {
+                padding: 3rem 1.25rem 2rem;
+            }
+
+            main {
+                padding: 2rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="hero">
+        <h1>Motorroutes vanuit <span>Maassluis</span></h1>
+        <p>Ontdek de mooiste ritten van 2–3 uur door Zuid-Holland en omstreken</p>
+        <div class="badge">5 routes &bull; 120–170 km &bull; startpunt Maassluis</div>
+    </header>
+
+    <main>
+        <h2 class="section-title">Routes</h2>
+
+        <div class="routes" id="routes"></div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Motorroutes Maassluis &mdash; Rij veilig, geniet van de weg <span>&hearts;</span></p>
+    </footer>
+
+    <script>
+        const routes = [
+            {
+                name: "Deltaroute",
+                km: 120,
+                duration: "~2 uur",
+                difficulty: "easy",
+                difficultyLabel: "Makkelijk",
+                description: "Prachtige rit langs de Zuid-Hollandse eilanden. Via Brielle en Ouddorp naar de Grevelingendam — weidse uitzichten over water en duinen."
+            },
+            {
+                name: "Kinderdijk & Biesbosch",
+                km: 130,
+                duration: "~2,5 uur",
+                difficulty: "easy",
+                difficultyLabel: "Makkelijk",
+                description: "Langs de iconische molens van Kinderdijk, door Dordrecht en het Nationaal Park De Biesbosch. Rustige dijkwegen en mooie natuur."
+            },
+            {
+                name: "Zeelandroute",
+                km: 160,
+                duration: "~3 uur",
+                difficulty: "medium",
+                difficultyLabel: "Gemiddeld",
+                description: "Een langere tocht via Hellevoetsluis en Zierikzee naar de Deltawerken bij Neeltje Jans. Afwisselend met bruggen, dammen en kustlijnen."
+            },
+            {
+                name: "Bollenstreek",
+                km: 140,
+                duration: "~2,5 uur",
+                difficulty: "easy",
+                difficultyLabel: "Makkelijk",
+                description: "Door Delft en Leiden naar de bollenvelden bij Lisse. Eindig langs de kust bij Noordwijk. Spectaculair in het voorjaar als de tulpen bloeien."
+            },
+            {
+                name: "Utrechtse Heuvelrug",
+                km: 170,
+                duration: "~3 uur",
+                difficulty: "medium",
+                difficultyLabel: "Gemiddeld",
+                description: "Via Gouda en Oudewater naar de bossen en heuvels bij Rhenen. De meest gevarieerde route met bochtige wegen door het groen."
+            }
+        ];
+
+        const container = document.getElementById("routes");
+
+        routes.forEach(route => {
+            const card = document.createElement("div");
+            card.className = "route-card";
+            card.innerHTML = `
+                <div class="route-header">
+                    <h2>${route.name}</h2>
+                </div>
+                <div class="route-meta">
+                    <span class="meta-tag"><span class="icon">&#9872;</span> ${route.km} km</span>
+                    <span class="meta-tag"><span class="icon">&#9200;</span> ${route.duration}</span>
+                </div>
+                <div class="route-body">
+                    <p>${route.description}</p>
+                </div>
+                <div class="route-footer">
+                    <span class="difficulty ${route.difficulty}">${route.difficultyLabel}</span>
+                    <span class="start-point">Start: <strong>Maassluis</strong></span>
+                </div>
+            `;
+            container.appendChild(card);
+        });
+    </script>
+
+</body>
+</html>
